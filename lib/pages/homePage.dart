@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -8,9 +10,17 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final Profile_url =
       "https://pbs.twimg.com/profile_images/1247651655065075712/fszwVtCL_400x400.jpg";
+
+   late TabController _tabController;
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(vsync: this, length: 4);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,22 +53,38 @@ class _HomePageState extends State<HomePage> {
               .make()
               .p12(),
           "Solo Traveler".text.white.bold.xl.make(),
-           VxTextField(
+          VxTextField(
             borderType: VxTextFieldBorderType.none,
             borderRadius: 18,
             hint: "Searh",
             fillColor: Vx.gray200.withOpacity(0.3),
             contentPaddingTop: 14,
             autofocus: false,
-            prefixIcon: Icon(Icons.search_off_outlined, color:Colors.white),
-
-          ).customTheme(themeData: 
-          ThemeData(
-            brightness:
-            Brightness.dark)).cornerRadius(10).p16()
-
+            prefixIcon: const Icon(Icons.search_off_outlined, color: Colors.white),
+          )
+              .customTheme(themeData: ThemeData(brightness: Brightness.dark))
+              .cornerRadius(10)
+              .p16()
         ].column())
-            .makeCentered()
+            .makeCentered().h40(context),
+        ClipRRect(
+          borderRadius:  const BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+          child: VxBox(child:  VStack(
+          [TabBar(controller: _tabController,
+           indicatorColor: Colors.purple,
+           indicatorSize: TabBarIndicatorSize.label,
+           labelColor: Vx.purple500,
+           unselectedLabelColor: Vx.gray500,
+           labelPadding: Vx.m16,
+            tabs: const [Icon(Icons.location_on,size: 30,),
+            Icon(Icons.search_outlined,size: 30,),
+            Icon(Icons.restaurant_outlined,size: 30,),
+            Icon(Icons.person_outlined,size: 30,)
+            ]  
+            )]
+          )).white.make(),
+        ).expand()
       ]),
     );
   }
