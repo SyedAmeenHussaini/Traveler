@@ -81,8 +81,37 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Icon(Icons.search_outlined,size: 30,),
             Icon(Icons.restaurant_outlined,size: 30,),
             Icon(Icons.person_outlined,size: 30,)
-            ]  
-            )]
+            ] , 
+            ),
+             TabBarView(
+              controller: _tabController,
+              children: [
+                "1","2","3","4"].map((e) => VStack(
+                ["Discover places in london"
+                .text.gray600.xl2.bold.make(),
+                HStack(
+                  [
+                  Image.network(Profile_url ).w(context.percentWidth *25,).cornerRadius(10),20.widthBox,
+                  VStack(
+                    [
+                      "Tower Bridge".text.semiBold.make(),
+                      3.heightBox,
+                      "Southwork".text.make().shimmer(),5.heightBox,
+                    [  VxRating(onRatingUpdate: (value){},
+                      ),
+                      5.widthBox,
+                      "100".text.bold.gray400.make(),
+                    ].row()
+                    ])
+                  ]
+                )
+                  //
+                ]
+              ).p16()).toList(),
+            ).expand()
+           ]
+           
+            
           )).white.make(),
         ).expand()
       ]),
