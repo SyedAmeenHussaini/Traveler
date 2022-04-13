@@ -16,18 +16,46 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       "https://pbs.twimg.com/profile_images/1247651655065075712/fszwVtCL_400x400.jpg";
   final bridgeurl =
       "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Tower_Bridge_from_Shad_Thames.jpg/1200px-Tower_Bridge_from_Shad_Thames.jpg";
-   
-   final london_Url="https://cdn.londonandpartners.com/-/media/images/london/visit/things-to-do/sightseeing/london-attractions/coca-cola-london-eye/the-london-eye-2-640x360.jpg?mw=640&hash=F7D574072DAD523443450DF57E3B91530064E4EE";
-  
+
+  final london_Url =
+      "https://cdn.londonandpartners.com/-/media/images/london/visit/things-to-do/sightseeing/london-attractions/coca-cola-london-eye/the-london-eye-2-640x360.jpg?mw=640&hash=F7D574072DAD523443450DF57E3B91530064E4EE";
+
   late TabController _tabController;
+  double anim = 1.0;
+  double anim2 = 1.0;
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: 4);
+
+    withAnimation(
+        vsync: this,
+        tween: Tween(begin: 1.0, end: 0.0),
+        callBack: (animationVal, controllerVal) {
+          anim = animationVal as double;
+          setState(() {});
+        });
+
+
+ withRepeatAnimation(
+        vsync: this,
+        tween: Tween(begin: 2.0, end: 3.0),
+        callBack: (animationVal, controllerVal) {
+          anim2= animationVal as double;
+          setState(() {});
+        });
+
+
+
+
+
   }
 
   @override
   Widget build(BuildContext context) {
+    final tabIndex = _tabController.index;
+
     return Scaffold(
       backgroundColor: Vx.purple500,
       appBar: AppBar(
@@ -56,7 +84,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               .white
               .xl3
               .make()
-              .p12(),
+              .p12()
+              .offset(offset: Offset(-300 * anim, 0.0)),
           "Solo Traveler".text.white.bold.xl.make(),
           VxTextField(
             borderType: VxTextFieldBorderType.none,
@@ -86,23 +115,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               labelColor: Vx.purple500,
               unselectedLabelColor: Vx.gray500,
               labelPadding: Vx.m16,
-              tabs: const [
+              tabs:  [
                 Icon(
                   Icons.location_on,
-                  size: 30,
-                ),
+                  size: 10,
+                ).scale(scaleValue: tabIndex== 0 ? anim2:3.00),
                 Icon(
                   Icons.search_outlined,
-                  size: 30,
-                ),
+                  size: 10,
+                ).scale(scaleValue: tabIndex== 1 ? anim2:3.00),
                 Icon(
                   Icons.restaurant_outlined,
-                  size: 30,
-                ),
+                  size: 10,
+                ).scale(scaleValue: tabIndex== 2 ? anim2:3.00),
                 Icon(
                   Icons.person_outlined,
-                  size: 30,
-                )
+                  size: 10,
+                ).scale(scaleValue: tabIndex== 3 ? anim2:3.00)
               ],
             ),
             TabBarView(
@@ -116,10 +145,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             .bold
                             .make(),
                         HeightBox(10),
-                      TravelCard
-                      (imageurl: bridgeurl,title: "Tower Bridge", subtitle: "lover tower",)
-                       ,HeightBox(10),
-                        TravelCard(imageurl:london_Url ,title: "London", subtitle: "Park",) //
+                        TravelCard(
+                          imageurl: bridgeurl,
+                          title: "Tower Bridge",
+                          subtitle: "lover tower",
+                        ),
+                        HeightBox(10),
+                        TravelCard(
+                          imageurl: london_Url,
+                          title: "London",
+                          subtitle: "Park",
+                        ) //
                       ]).p16())
                   .toList(),
             ).expand()
@@ -134,7 +170,9 @@ class TravelCard extends StatelessWidget {
   final String title, subtitle, imageurl;
   const TravelCard({
     Key? key,
-    required this.imageurl, required this.title, required this.subtitle,
+    required this.imageurl,
+    required this.title,
+    required this.subtitle,
   }) : super(key: key);
 
   @override
